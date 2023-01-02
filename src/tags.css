@@ -1,0 +1,17 @@
+.self-render-tags {
+  /* background-color: #000; */
+}
+.self-render-tags .arco-input-tag-inner {
+  flex-wrap: nowrap;
+}
+.tag-wrap {
+}
+.tag-tip {
+  position: relative;
+}
+.tag-mark {
+  display: inline-block;
+  position: absolute;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
