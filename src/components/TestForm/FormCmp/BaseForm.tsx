@@ -6,7 +6,6 @@ import { IFormCmpRef, IFormItem } from "./types";
 
 interface IBaseForm {
   columnConfig: IFormItem[];
-  initData?: () => Promise<Record<string, any>>;
   register?: (cb: any) => any;
   formProps?: FormProps;
   extraNode?: React.ReactNode;
@@ -17,17 +16,8 @@ export interface IBaseFormRef {
 }
 
 const BaseForm = React.forwardRef<IBaseFormRef, IBaseForm>((props, ref) => {
-  const { columnConfig, initData, extraNode, formProps = {} } = props;
-  const [initValues, setInitValues] = React.useState<Record<string, any>>();
+  const { columnConfig, extraNode, formProps = {} } = props;
   const formRef = useRef<IFormCmpRef>(null);
-  useEffect(() => {
-    if (initData) {
-      console.log("render---init");
-      initData().then((rs: any) => {
-        setInitValues(rs);
-      });
-    }
-  }, [initData]);
 
   const getForm = useMemoizedFn(() => {
     return formRef.current?.getForm();
@@ -49,7 +39,6 @@ const BaseForm = React.forwardRef<IBaseFormRef, IBaseForm>((props, ref) => {
     <FormCmp
       ref={formRef}
       schemaList={columnConfig}
-      initValues={initValues}
       formProps={formProps}
       extraNode={extraNode}
     />

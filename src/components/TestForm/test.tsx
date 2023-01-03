@@ -5,6 +5,8 @@ import useDialog from "./hooks";
 import ModalConfig from "./config";
 import useCreateForm from "./hooks/useBaseForm";
 import BaseForm from "./FormCmp/BaseForm";
+import { IFormItem } from "./FormCmp/types";
+import { useReactive } from "ahooks";
 
 const RenderDemo: React.FC = () => {
   useEffect(() => {
@@ -30,9 +32,106 @@ const fakeSync2 = () => {
           label: "gggooo",
           value: "ggdddd",
         },
+        {
+          label: "g1",
+          value: "g1",
+        },
       ]);
-    }, 2000);
+    });
   });
+};
+const fakeSyncOpts = () => {
+  return new Promise<any>((resolve) => {
+    setTimeout(() => {
+      console.log("back");
+      resolve([
+        {
+          label: "gggooo" + Math.random(),
+          value: "ggdddd" + Math.random(),
+        },
+      ]);
+    }, 500);
+  });
+};
+
+const _columnConfig = (ob?): IFormItem[] => {
+  console.log("render-----");
+  return [
+    {
+      label: "name",
+      field: "name",
+      component: "Input",
+      rules: [
+        {
+          required: true,
+        },
+      ],
+      colProps: {
+        span: 6,
+      },
+      componentProps: {
+        onChange(val, ob) {
+          console.log("val", val, ob);
+        },
+      },
+    },
+    {
+      label: "KOL名称",
+      field: "kolName",
+      component: "Select",
+      colProps: {
+        span: 12,
+      },
+      rules: [
+        {
+          required: true,
+          message: "请选择",
+        },
+      ],
+      componentProps: {
+        placeholder: "请选择",
+        options: ob?.kolNameOptions ?? [
+          {
+            label: "我是开始的",
+            value: "111",
+          },
+        ],
+        // options: [],
+        onChange: (val, { form, setOptions }) => {
+          console.log("val222222", val);
+          // form.setFieldValue("password", val);
+          fakeSyncOpts().then((rs) => {
+            setOptions({
+              kolRealName: rs,
+            });
+          });
+        },
+      },
+    },
+    {
+      label: "KOL真实名称",
+      field: "kolRealName",
+      component: "Select",
+      colProps: {
+        span: 12,
+      },
+      rules: [
+        {
+          required: true,
+          message: "请选择",
+        },
+      ],
+      componentProps: {
+        placeholder: "请选择",
+        options: [],
+        // options: stateDicts,
+        onChange: (val, { form }) => {
+          console.log("val222222", val);
+          // form.setFieldValue("password", val);
+        },
+      },
+    },
+  ];
 };
 
 const TestDemo = () => {
@@ -54,169 +153,74 @@ const TestDemo = () => {
     });
   };
 
-  // const [selfRef, baseform] = renderForm({
-  //   onSubmit: (rs) => {
-  //     console.log("render------", rs);
-  //   },
-  //   initData: renderData,
-  //   columnConfig: [
-  //     {
-  //       label: "name2",
-  //       field: "name2",
-  //       component: "Input",
-  //       rules: [
-  //         {
-  //           required: true,
-  //         },
-  //       ],
-  //       colProps: {
-  //         span: 6,
-  //       },
-  //       componentProps: {
-  //         onChange(val, ob) {
-  //           console.log("val", val, ob);
-  //         },
-  //       },
-  //     },
-  //     {
-  //       label: "name1",
-  //       field: "name1",
-  //       component: "Input",
-  //       rules: [
-  //         {
-  //           required: true,
-  //         },
-  //       ],
-  //       colProps: {
-  //         span: 6,
-  //       },
-  //       componentProps: {
-  //         onChange(val, ob) {
-  //           console.log("val", val, ob);
-  //         },
-  //       },
-  //     },
-  //     {
-  //       label: "name",
-  //       field: "name",
-  //       component: "Input",
-  //       rules: [
-  //         {
-  //           required: true,
-  //         },
-  //       ],
-  //       colProps: {
-  //         span: 6,
-  //       },
-  //       componentProps: {
-  //         onChange(val, ob) {
-  //           console.log("val", val, ob);
-  //         },
-  //       },
-  //     },
-  //     {
-  //       label: "password",
-  //       field: "password",
-  //       component: "Input",
-  //       colProps: {
-  //         span: 6,
-  //       },
-  //     },
-  //   ],
-  // });
+  const state = useReactive({
+    kolNameOptions: [],
+    kolRealNameOptions: [],
+  });
 
-  const [stateDicts, setStateDicts] = useState(null);
+  const _config = React.useMemo(() => {
+    console.log("data-init");
+    return _columnConfig({
+      ...state,
+    });
+  }, [_columnConfig, state.kolNameOptions, state.kolRealNameOptions]);
 
-  const _columnConfig = React.useMemo(() => {
-    console.log("render-----");
-    return [
-      {
-        label: "name",
-        field: "name",
-        component: "Input",
-        rules: [
-          {
-            required: true,
-          },
-        ],
-        colProps: {
-          span: 6,
-        },
-        componentProps: {
-          onChange(val, ob) {
-            console.log("val", val, ob);
-          },
-        },
-      },
-      {
-        label: "喜欢的人",
-        field: "live",
-        component: "Select",
-        colProps: {
-          span: 12,
-        },
-        rules: [
-          {
-            required: true,
-            message: "请选择",
-          },
-        ],
-        componentProps: {
-          placeholder: "请选择",
-          options: stateDicts,
-          onChange: (val, { form, schema }) => {
-            console.log("val222222", val, schema);
-            // form.setFieldValue("password", val);
-          },
-        },
-      },
-    ];
-  }, [stateDicts]);
+  const _config2 = React.useMemo(() => {
+    return _columnConfig();
+  }, [_columnConfig]);
 
   const { createForm } = useCreateForm();
-  const { getForm, tpl } = createForm({
+  const [getForm, tpl] = createForm({
     onSubmit: (rs) => {
       console.log("render------", rs);
     },
-    initData: renderData,
-    columnConfig: _columnConfig,
+    columnConfig: _config,
   });
-  const baseRef = useRef(null);
+
+  const [getForm2, tpl2] = createForm({
+    onSubmit: (rs) => {
+      console.log("render------", rs);
+    },
+    columnConfig: _config2,
+  });
 
   useEffect(() => {
-    // console.log("ref", ref);
-    // console.log("baseRef", ));
-
+    const form = getForm();
+    const form2 = getForm2();
     fakeSync2().then((rs) => {
-      setStateDicts([...rs]);
-      console.log("stateDicts.current.options", stateDicts);
+      console.log("form", form);
+      state.kolNameOptions = rs;
+      // form2.setFieldValue("kolName", "aaa222");
+      form.setOptions({
+        kolRealName: [
+          {
+            label: "options-set",
+            value: "aaa222",
+          },
+        ],
+      });
     });
-
-    // const form = baseRef.current?.getForm();
-    // fakeSync(2000).then((rs) => {
-    //   form.setFieldValue("name", rs);
-    //   form.setOptions({
-    //     live: [
-    //       {
-    //         label: "perfectyang",
-    //         value: "000k0",
-    //       },
-    //     ],
-    //   });
-    // });
-    // fakeSync(4000).then((rs) => {
-    //   // form.setFieldValue("password", rs);
-    // });
+    fakeSyncOpts().then((rs) => {
+      form2.setFieldValue("kolRealName", rs[0].value);
+      form2.setOptions({
+        kolRealName: rs,
+      });
+    });
   }, []);
 
   return (
     <div>
-      {/* {tpl} */}
-      <BaseForm
+      <hr />
+      111
+      {tpl}
+      <hr />
+      222
+      {tpl2}
+      {/* <BaseForm
         ref={baseRef}
         initData={renderData}
         columnConfig={_columnConfig}
-      />
+      /> */}
       {/* {baseform} */}
       {/* {tpl} */}
       {/* <Button

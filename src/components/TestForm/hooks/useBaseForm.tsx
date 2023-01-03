@@ -5,36 +5,23 @@ import { IFormItem } from "../FormCmp/types";
 
 interface IRenderForm {
   columnConfig: IFormItem[];
-  initData?: () => Promise<Record<string, any>>;
   onSubmit?: (val: Record<string, any>) => void;
   onReset?: () => void;
 }
-type IRenderFormRes = {
-  getForm: () => any;
-  tpl: React.ReactNode;
-};
 
-// const useBaseForm = () => {
-//   console.log("run-again");
-//   return {};
-// };
+type IRenderFormRes = [
+  () => FormInstance & { setOptions: (ob: Record<string, any>) => void },
+  React.ReactNode
+];
 
 const createForm = ({
   columnConfig,
-  initData,
   onSubmit,
   onReset,
 }: IRenderForm): IRenderFormRes => {
-  let handler: () => FormInstance;
-  const ob = {
-    handler: null,
-  };
-  const register = ({ getForm }) => {
-    handler = getForm;
-    ob.handler = getForm;
-  };
+  const IBaseRef = useRef<IBaseFormRef>(null);
   const _onSubmit = () => {
-    const form = handler();
+    const form = IBaseRef.current?.getForm();
     return form
       .validate()
       .then((rs) => {
@@ -44,51 +31,51 @@ const createForm = ({
         console.error(e);
       });
   };
-  const IBaseRef = useRef<IBaseFormRef>(null);
-  return {
-    getForm: () => {
+
+  const _onReset = () => {
+    const form = IBaseRef.current?.getForm();
+    form.resetFields();
+    onReset?.();
+  };
+
+  return [
+    () => {
       return IBaseRef.current?.getForm();
     },
-    tpl: (
-      <BaseForm
-        ref={IBaseRef}
-        columnConfig={columnConfig}
-        initData={initData}
-        register={register}
-        extraNode={
-          <>
-            <Button
-              style={{
-                marginLeft: "10px",
-              }}
-              type="primary"
-              status="danger"
-              onClick={() => {
-                _onSubmit().then((rs) => {
-                  onSubmit?.(rs);
-                });
-              }}
-            >
-              搜索
-            </Button>
-            <Button
-              style={{
-                marginLeft: "10px",
-              }}
-              type="primary"
-              onClick={() => {
-                const form = handler();
-                form.resetFields();
-                onReset?.();
-              }}
-            >
-              重置
-            </Button>
-          </>
-        }
-      />
-    ),
-  };
+    <BaseForm
+      ref={IBaseRef}
+      columnConfig={columnConfig}
+      extraNode={
+        <>
+          <Button
+            style={{
+              marginLeft: "10px",
+            }}
+            type="primary"
+            status="danger"
+            size="small"
+            onClick={() => {
+              _onSubmit().then((rs) => {
+                onSubmit?.(rs);
+              });
+            }}
+          >
+            搜索
+          </Button>
+          <Button
+            style={{
+              marginLeft: "10px",
+            }}
+            type="primary"
+            size="small"
+            onClick={_onReset}
+          >
+            重置
+          </Button>
+        </>
+      }
+    />,
+  ];
 };
 
 const useCreateForm = () => {

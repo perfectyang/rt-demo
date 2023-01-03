@@ -19,21 +19,18 @@ const fakeAsync = () => {
 
 const ModalConfig = (props) => {
   const data = {};
-  // let handler: () => FormInstance;
-  const ob = {
-    getForm: null,
+
+  const ob: any = {
+    getForm: () => {},
   };
+
   const register = ({ getForm }) => {
     ob.getForm = getForm;
   };
 
   const ComponentConfig: IModalConfig = {
     content: (
-      <BaseForm
-        columnConfig={columnConfig}
-        initData={fakeAsync}
-        register={register}
-      ></BaseForm>
+      <BaseForm columnConfig={columnConfig} register={register}></BaseForm>
     ),
     style: {},
     title: "我是大帅哥222",
@@ -49,13 +46,11 @@ const ModalConfig = (props) => {
     //   </span>
     // ),
     onOk: async () => {
-      console.log("ok", data);
       props.onOk?.();
       const form = ob.getForm();
-      form.validate().then((rs) => {
-        console.log("aaaa1111", rs);
-      });
-      return Promise.reject();
+      const ret = await form.validate();
+      console.log("ret", ret);
+      return Promise.resolve();
     },
     onCancel: () => {
       console.log("cancel");

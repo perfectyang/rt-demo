@@ -8,8 +8,8 @@ import {
   Grid,
   FormProps,
 } from "@arco-design/web-react";
-import React, { useEffect } from "react";
-import { useUpdate, useMemoizedFn } from "ahooks";
+import React, { useEffect, useRef } from "react";
+import { useUpdate, useMemoizedFn, useMap, useUpdateEffect } from "ahooks";
 import { IForm, IFormCmpRef } from "./types";
 
 const uid = (key = "") => `${key}-${Math.random()}`;
@@ -22,10 +22,6 @@ export const Components = {
   Input,
   RadioGroup: Radio.Group,
   Select,
-  // TestComp: (props) => {
-  //   console.log("props", props);
-  //   return <span>aaa</span>;
-  // },
 };
 
 const computedLabelWidth = <T extends FormItemProps>(
@@ -52,8 +48,6 @@ const RenderComponent = ({ schema, form, setOptions, ...retProps }) => {
     return schema.render({ schema, form, setOptions, ...retProps });
   }
 
-  console.log("retProps", retProps);
-
   const RenderComp = Components[schema.component];
   if (componentProps && componentProps.onChange) {
     const _onChange = componentProps.onChange;
@@ -64,45 +58,56 @@ const RenderComponent = ({ schema, form, setOptions, ...retProps }) => {
   }
   return (
     <RenderComp
-      {...componentProps}
       {...retProps}
+      {...componentProps}
       form={Object.assign({}, form, { setOptions })}
     />
   );
 };
 
 const FormCmp = React.forwardRef<IFormCmpRef, IForm>((props, ref) => {
-  const { schemaList, initValues = {}, formProps = {}, extraNode } = props;
+  const { schemaList, formProps = {}, extraNode } = props;
   const [form] = Form.useForm();
   const foreUpdate = useUpdate();
   const random = uid();
+  const [options, { set: optSet, get: optGet }] = useMap();
 
   const layoutType = React.useMemo(() => {
     return formProps.layout ?? "horizontal";
   }, []);
 
-  const setOptions = useMemoizedFn((ob) => {
+  const setSchema = useMemoizedFn((ob, callback?) => {
     schemaList.forEach((schema: any) => {
       if (ob[schema.field] && schema.componentProps?.options) {
+        callback?.(schema);
         schema.componentProps.options = [...ob[schema.field]];
       }
     });
+  });
+
+  const setOptions = useMemoizedFn((ob) => {
+    setSchema(ob, (schema) => {
+      optSet(schema.field, [...ob[schema.field]]);
+    });
     foreUpdate();
   });
+
+  useUpdateEffect(() => {
+    const keys: any[] = Array.from(options.keys());
+    keys.forEach((key) => {
+      const ob = {
+        [key]: optGet(key),
+      };
+      setSchema(ob);
+    });
+    foreUpdate();
+  }, [schemaList]);
 
   React.useImperativeHandle(ref, () => ({
     getForm: () => {
       return { ...form, setOptions };
     },
   }));
-
-  useEffect(() => {
-    Object.entries(initValues).forEach(([key, value]) => {
-      form.setFieldsValue({
-        [key]: value,
-      });
-    });
-  }, [initValues]);
 
   const _formProps: FormProps = {
     form,
@@ -132,7 +137,6 @@ const FormCmp = React.forwardRef<IFormCmpRef, IForm>((props, ref) => {
             ...colProps,
             key: `col-${random}-${idx + 1}`,
           };
-          console.log("before-schema", schema);
 
           return (
             <Col {..._colProps}>
@@ -140,7 +144,6 @@ const FormCmp = React.forwardRef<IFormCmpRef, IForm>((props, ref) => {
                 {(values) => {
                   const renderConditionFn =
                     renderCondition?.(values, schema) ?? true;
-                  console.log("schema", schema);
                   return renderConditionFn ? (
                     <FormItem
                       label={schema.label}

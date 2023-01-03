@@ -21,7 +21,7 @@ const fakeAsync = () => {
 
 const columnConfig: IFormItem[] = [
   {
-    label: "出来密码",
+    label: "出来密码222",
     field: "type",
     component: "RadioGroup",
     rules: [
@@ -38,7 +38,7 @@ const columnConfig: IFormItem[] = [
     componentProps: {
       options: ["A", "B"],
       onChange: (val, { form, setOptions }) => {
-        console.log("val", val);
+        console.log("-----", form);
         form.setFieldsValue({
           password: val,
           live: undefined,
