@@ -36,6 +36,8 @@ export type IFormItem = {
       val: any,
       ob: {
         setOptions: (ob: Record<string, any>) => void;
+        schema: IFormItem;
+        values: any;
       } & IGetFormInstance
     ) => void;
     [key: string]: any;

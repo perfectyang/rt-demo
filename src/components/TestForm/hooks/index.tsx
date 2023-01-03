@@ -67,23 +67,26 @@ const HookModal = forwardRef<HookModalRef, IModalConfig>((props, ref) => {
     config.onCancel && config.onCancel();
     setVisible(false);
   }
+
+  const { content, ...retProps } = props;
+
   const modalConfig = {
-    ...config,
+    ...retProps,
     maskClosable: config.maskClosable ?? false,
   };
 
+  console.log("modalConfig", modalConfig);
   return (
     <Modal {...modalConfig} visible={visible} onOk={onOk} onCancel={onCancel}>
-      {visible && config.content}
+      {visible && content}
     </Modal>
   );
 });
 
 export function configModal(props: IModalConfig) {
   let unMount: any = null;
-  let ref;
+  const ref = React.createRef<HookModalRef>();
   const Wrapper = () => {
-    ref = React.useRef<HookModalRef>();
     return (
       <HookModal
         ref={ref}

@@ -16,7 +16,7 @@ const uid = (key = "") => `${key}-${Math.random()}`;
 // 组件
 const FormItem = Form.Item;
 const { Row, Col } = Grid;
-
+// 组件注册
 export const Components = {
   InputNumber,
   Input,
@@ -41,25 +41,52 @@ const computedLabelWidth = <T extends FormItemProps>(
   };
 };
 
-// 渲染不同组件
-const RenderComponent = ({ schema, form, setOptions, ...retProps }) => {
-  const componentProps = schema.componentProps ?? {};
-  if (schema.render) {
-    return schema.render({ schema, form, setOptions, ...retProps });
-  }
+const handleSelectConfig = (schema) => {
+  const isSelect =
+    schema.component && ["Select", "TreeSelect"].includes(schema.component);
+  const selectConfig = {
+    allowClear: true,
+    showSearch: true,
+    filterOption: (inputValue, option) => {
+      return (
+        option.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) >
+          -1 ||
+        option.props.value?.toLowerCase().indexOf(inputValue.toLowerCase()) >
+          -1 ||
+        option.props.title?.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+      );
+    },
+  };
+  const ob = isSelect ? selectConfig : {};
+  return ob;
+};
 
-  const RenderComp = Components[schema.component];
+const handleComponentProps = (componentProps, retProps, params) => {
   if (componentProps && componentProps.onChange) {
     const _onChange = componentProps.onChange;
     componentProps.onChange = (val) => {
       retProps.onChange(val);
-      _onChange(val, { form, setOptions, schema });
+      _onChange(val, params);
     };
   }
+};
+
+// 渲染不同组件
+const RenderComponent = ({ schema, form, setOptions, values, ...retProps }) => {
+  const RenderComp = Components[schema.component];
+  const componentProps = schema.componentProps ?? {};
+  const params = { schema, form, setOptions, values, ...retProps };
+  if (schema.render) {
+    return schema.render(params);
+  }
+
+  handleComponentProps(componentProps, retProps, params);
+
   return (
     <RenderComp
       {...retProps}
       {...componentProps}
+      {...handleSelectConfig(schema)}
       form={Object.assign({}, form, { setOptions })}
     />
   );
@@ -112,10 +139,11 @@ const FormCmp = React.forwardRef<IFormCmpRef, IForm>((props, ref) => {
   const _formProps: FormProps = {
     form,
     layout: layoutType,
+    size: formProps.size ?? "small",
     style:
       layoutType === "inline" ? { width: "100%", display: "inline-block" } : {},
     validateMessages: {
-      required: (_: any, { label }) => `请输入选择${label}！`,
+      required: (_: any, { label }) => `请输入(选择)${label}！`,
     },
     ...formProps,
   };
@@ -157,6 +185,7 @@ const FormCmp = React.forwardRef<IFormCmpRef, IForm>((props, ref) => {
                         schema={schema}
                         form={form}
                         setOptions={setOptions}
+                        values={values}
                       />
                     </FormItem>
                   ) : null;

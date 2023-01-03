@@ -1,7 +1,7 @@
-import { FormInstance } from "@arco-design/web-react";
+import { Button, FormInstance } from "@arco-design/web-react";
 import React, { useEffect } from "react";
 import FormCmp from "../FormCmp";
-import BaseForm from "../FormCmp/BaseForm";
+import BaseForm, { IBaseFormRef } from "../FormCmp/BaseForm";
 import { IModalConfig } from "../hooks";
 import columnConfig from "./formConfig";
 import TestRender from "./TestRender";
@@ -17,9 +17,25 @@ const fakeAsync = () => {
   });
 };
 
-const ModalConfig = (props) => {
-  const data = {};
+const ModalForm = ({ register, columnConfig, initValues = {} }) => {
+  const IBaseRef = React.useRef<IBaseFormRef>(null);
+  useEffect(() => {
+    const form: FormInstance = IBaseRef.current?.getForm();
+    form.setFieldsValue({
+      ...initValues,
+    });
+  }, [initValues]);
 
+  return (
+    <BaseForm
+      ref={IBaseRef}
+      columnConfig={columnConfig}
+      register={register}
+    ></BaseForm>
+  );
+};
+
+const ModalConfig = (props) => {
   const ob: any = {
     getForm: () => {},
   };
@@ -30,36 +46,56 @@ const ModalConfig = (props) => {
 
   const ComponentConfig: IModalConfig = {
     content: (
-      <BaseForm columnConfig={columnConfig} register={register}></BaseForm>
+      <ModalForm
+        columnConfig={columnConfig}
+        register={register}
+        initValues={props?.initValues ?? {}}
+      />
     ),
-    style: {},
-    title: "我是大帅哥222",
-    okText: "保存---是",
-    // footer: (
-    //   <span
-    //     onClick={() => {
-    //       console.log("ok", data);
-    //       props.modalVisible(false);
-    //     }}
-    //   >
-    //     111
-    //   </span>
-    // ),
-    onOk: async () => {
-      props.onOk?.();
-      const form = ob.getForm();
-      const ret = await form.validate();
-      console.log("ret", ret);
-      return Promise.resolve();
-    },
-    onCancel: () => {
-      console.log("cancel");
-    },
-    afterClose: () => {
-      console.log("after--close");
-    },
+    title: props.title || " ",
+    footer: (
+      <>
+        <Button
+          onClick={() => {
+            console.log("aaaa");
+            props.modalVisible(false);
+          }}
+        >
+          取消
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            console.log("aaaa");
+            props.modalVisible(false);
+          }}
+        >
+          确定
+        </Button>
+      </>
+    ),
+    // onOk: async () => {
+    //   const form = ob.getForm();
+    //   const ret = await form.validate();
+    //   console.log("ret", ret);
+    //   props.onOk?.();
+    //   return Promise.resolve();
+    // },
+    // onCancel: () => {
+    //   console.log("cancel");
+    //   props.onCancel?.();
+    // },
+    // afterClose: () => {
+    //   console.log("after--close");
+    // },
   };
   return ComponentConfig;
+};
+
+const useModalConfig = () => {
+  const genConfig = (props) => {
+    return ModalConfig(props);
+  };
 };
 
 export default ModalConfig;

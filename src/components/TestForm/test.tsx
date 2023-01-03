@@ -250,7 +250,14 @@ const TestDemo = () => {
       <Button
         onClick={() => {
           console.log("aaaaa-----");
-          openDialog(ModalConfig({ modalVisible }));
+          openDialog(
+            ModalConfig({
+              modalVisible,
+              initValues: {
+                type: "A",
+              },
+            })
+          );
         }}
       >
         open
