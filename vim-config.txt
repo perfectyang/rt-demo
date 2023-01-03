@@ -1,0 +1,9 @@
+code --install-extension vim-1.24.3.vsix --force
+
+vscode配置
+"vim.leap": true,
+"vim.leapShowMarkerPosition": "target",
+
+
+eg: hello
+启动符s -> he --> 高亮结束符
