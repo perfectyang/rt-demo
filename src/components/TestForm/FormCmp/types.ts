@@ -55,6 +55,7 @@ export interface IForm {
   schemaList: IFormItem[];
   formProps?: FormProps;
   extraNode?: React.ReactNode;
+  prefixNode?: React.ReactNode;
 }
 
 export interface IFormCmpRef {

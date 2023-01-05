@@ -45,6 +45,23 @@ const createForm = ({
     <BaseForm
       ref={IBaseRef}
       columnConfig={columnConfig}
+      prefixNode={
+        <Button
+          style={{
+            marginLeft: "10px",
+          }}
+          type="primary"
+          status="danger"
+          size="small"
+          onClick={() => {
+            _onSubmit().then((rs) => {
+              onSubmit?.(rs);
+            });
+          }}
+        >
+          搜索
+        </Button>
+      }
       extraNode={
         <>
           <Button

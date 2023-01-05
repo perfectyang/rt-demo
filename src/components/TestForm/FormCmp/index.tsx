@@ -93,7 +93,7 @@ const RenderComponent = ({ schema, form, setOptions, values, ...retProps }) => {
 };
 
 const FormCmp = React.forwardRef<IFormCmpRef, IForm>((props, ref) => {
-  const { schemaList, formProps = {}, extraNode } = props;
+  const { schemaList, formProps = {}, extraNode, prefixNode } = props;
   const [form] = Form.useForm();
   const foreUpdate = useUpdate();
   const random = uid();
@@ -151,6 +151,7 @@ const FormCmp = React.forwardRef<IFormCmpRef, IForm>((props, ref) => {
   return (
     <Form {..._formProps}>
       <Row>
+        {prefixNode}
         {schemaList.map((schema, idx) => {
           const {
             shouldUpdate = false,

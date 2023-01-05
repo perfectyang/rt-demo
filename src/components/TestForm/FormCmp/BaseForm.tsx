@@ -9,6 +9,7 @@ interface IBaseForm {
   register?: (cb: any) => any;
   formProps?: FormProps;
   extraNode?: React.ReactNode;
+  prefixNode?: React.ReactNode;
 }
 
 export interface IBaseFormRef {
@@ -16,7 +17,7 @@ export interface IBaseFormRef {
 }
 
 const BaseForm = React.forwardRef<IBaseFormRef, IBaseForm>((props, ref) => {
-  const { columnConfig, extraNode, formProps = {} } = props;
+  const { columnConfig, extraNode, prefixNode, formProps = {} } = props;
   const formRef = useRef<IFormCmpRef>(null);
 
   const getForm = useMemoizedFn(() => {
@@ -41,6 +42,7 @@ const BaseForm = React.forwardRef<IBaseFormRef, IBaseForm>((props, ref) => {
       schemaList={columnConfig}
       formProps={formProps}
       extraNode={extraNode}
+      prefixNode={prefixNode}
     />
   );
 });
