@@ -1,7 +1,7 @@
 import { Button, FormInstance } from "@arco-design/web-react";
 import React, { useRef } from "react";
-import BaseForm, { IBaseFormRef } from "../FormCmp/BaseForm";
-import { IFormItem } from "../FormCmp/types";
+import BaseForm, { IBaseFormRef } from "../Form/BaseForm";
+import { IFormItem } from "../Form/types";
 
 interface IRenderForm {
   columnConfig: IFormItem[];

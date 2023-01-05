@@ -4,8 +4,8 @@ import ComponentConfig from "./config";
 import useDialog from "./hooks";
 import ModalConfig from "./config";
 import useCreateForm from "./hooks/useBaseForm";
-import BaseForm from "./FormCmp/BaseForm";
-import { IFormItem } from "./FormCmp/types";
+import BaseForm from "./Form/BaseForm";
+import { IFormItem } from "./Form/types";
 import { useReactive } from "ahooks";
 
 const RenderDemo: React.FC = () => {
