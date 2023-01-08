@@ -2,7 +2,6 @@ import { Select, Button } from "@arco-design/web-react";
 import { getEndDay, getFirstWeek, getLastDate, renderText, ut } from "./utils";
 import "./index.less";
 import React from "react";
-import classname from "classname";
 
 interface IRef {
   getDays: (val: any) => any;
@@ -28,6 +27,8 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
   const [years, setYears] = React.useState<any[]>([]);
   const [months, setMonths] = React.useState<any[]>([]);
   const [days, setDays] = React.useState<any[]>([]);
+  const [page, setPage] = React.useState(0);
+  const [direction, setDirection] = React.useState(0);
 
   const randomId = () => Math.random().toString(36).substring(2);
 
@@ -41,6 +42,8 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
     // 渲染几行几行
     const row = 6;
     const column = 7;
+    console.log("pagepage,,", page);
+    const offset = page * 7;
 
     const daysArr: Record<string, any>[] = [];
     let prevStartDate = lastMonEndDay - lastWeekNum + 1; // 上个月的起始日期
@@ -55,6 +58,7 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
           cls: "arco-calendar-cell-date prev",
           y: lastDate.getFullYear(),
           m: lastDate.getMonth() + 1,
+          // d: prevStartDate++,
           d: prevStartDate++,
         });
       } else if (i >= lastWeekNum + curMonEndDay) {
@@ -79,6 +83,7 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
         });
       }
     }
+    console.log("daysArr", daysArr);
     setDays(daysArr);
   };
 
@@ -87,6 +92,29 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
       return days;
     },
   }));
+
+  const pageCalendar = () => {
+    return (
+      <div>
+        <Button
+          onClick={() => {
+            setPage((pr) => pr + 1);
+            setDirection(0);
+          }}
+        >
+          pre
+        </Button>
+        <Button
+          onClick={() => {
+            setPage((pr) => pr + 1);
+            setDirection(1);
+          }}
+        >
+          next
+        </Button>
+      </div>
+    );
+  };
 
   const yearRender = () => {
     return (
@@ -150,7 +178,9 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
             <div
               className={item.cls}
               key={randomId()}
-              onClick={() => checkDate({ y: item.y, m: item.m, d: item.d })}
+              onClick={() => {
+                // checkDate({ y: item.y, m: item.m, d: item.d })
+              }}
             >
               <p>{renderText(item)}</p>
               <main>{dateRender}</main>
@@ -170,10 +200,10 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
 
   React.useEffect(() => {
     eachDays(vals.y, vals.m);
-  }, [vals]);
+  }, [vals, page, direction]);
   React.useEffect(() => {
     eachDays(checked.y, checked.m);
-  }, [checked]);
+  }, [checked, page, direction]);
 
   React.useEffect(() => {
     setYears(() => {
@@ -212,6 +242,7 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
         >
           今天
         </Button>
+        {pageCalendar()}
       </div>
       <div className="arco-calendar-body je-ovh">
         <div className="arco-calendar-month je-ovh">
