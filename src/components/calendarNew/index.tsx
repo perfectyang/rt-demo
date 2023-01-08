@@ -39,14 +39,17 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
     const week = getFirstWeek(yd, md); // 当前月的第一天是周几
     let lastWeekNum = week - 1; // 上个月占几个格子
     lastWeekNum = week === 0 ? 6 : lastWeekNum;
+
+    const offset = page * 7;
+
     // 渲染几行几行
     const row = 6;
     const column = 7;
     console.log("pagepage,,", page);
-    const offset = page * 7;
 
     const daysArr: Record<string, any>[] = [];
     let prevStartDate = lastMonEndDay - lastWeekNum + 1; // 上个月的起始日期
+    console.log("prevStartDate", prevStartDate);
     let curStartDate = 1;
     let nextStartDate = 1;
 
@@ -98,15 +101,17 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
       <div>
         <Button
           onClick={() => {
-            setPage((pr) => pr + 1);
-            setDirection(0);
+            console.log("days", days);
+            // setVals();
+            // setPage((pr) => pr + 1);
+            // setDirection(0);
           }}
         >
           pre
         </Button>
         <Button
           onClick={() => {
-            setPage((pr) => pr + 1);
+            setPage((pr) => pr - 1);
             setDirection(1);
           }}
         >
