@@ -1,6 +1,6 @@
 import { Input } from "@arco-design/web-react";
 import React from "react";
-import { IFormItem } from "../FormCmp/types";
+import { IFormItem } from "../Form/types";
 
 const fakeAsync = () => {
   return new Promise((resolve) => {

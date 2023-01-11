@@ -1,10 +1,8 @@
 import { Button, FormInstance } from "@arco-design/web-react";
 import React, { useEffect } from "react";
-import FormCmp from "../Form";
 import BaseForm, { IBaseFormRef } from "../Form/BaseForm";
 import { IModalConfig } from "../hooks";
 import columnConfig from "./formConfig";
-import TestRender from "./TestRender";
 
 const fakeAsync = () => {
   return new Promise((resolve) => {

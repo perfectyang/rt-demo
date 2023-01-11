@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import FormCmp from "../FormCmp";
+import FormCmp from "../Form";
 import columnConfig from "./formConfig";
 const fakeAsync = () => {
   return new Promise((resolve) => {
