@@ -51,38 +51,25 @@ const ModalConfig = (props) => {
       />
     ),
     title: props.title || " ",
-    footer: (
-      <>
-        <Button
-          onClick={() => {
-            console.log("aaaa");
-            props.modalVisible(false);
-          }}
-        >
-          取消
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            console.log("aaaa");
-            props.modalVisible(false);
-          }}
-        >
-          确定
-        </Button>
-      </>
-    ),
-    // onOk: async () => {
-    //   const form = ob.getForm();
-    //   const ret = await form.validate();
-    //   console.log("ret", ret);
-    //   props.onOk?.();
-    //   return Promise.resolve();
-    // },
-    // onCancel: () => {
-    //   console.log("cancel");
-    //   props.onCancel?.();
-    // },
+    footer: (cancelBtn, okBtn) => {
+      return (
+        <>
+          {cancelBtn}
+          {okBtn}
+        </>
+      );
+    },
+    onOk: async () => {
+      const form = ob.getForm();
+      const ret = await form.validate();
+      console.log("ret", ret);
+      props.onOk?.();
+      return Promise.reject();
+    },
+    onCancel: () => {
+      console.log("cancel");
+      props.onCancel?.();
+    },
     // afterClose: () => {
     //   console.log("after--close");
     // },

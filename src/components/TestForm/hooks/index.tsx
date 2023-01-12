@@ -50,11 +50,12 @@ const HookModal = forwardRef<HookModalRef, IModalConfig>((props, ref) => {
           }));
         },
         (e: Error) => {
+          console.log("里-------");
           console.error(e);
-          setConfig((config) => ({
-            ...config,
-            confirmLoading: false,
-          }));
+          // setConfig((config) => ({
+          //   ...config,
+          //   confirmLoading: false,
+          // }));
         }
       );
     }
@@ -68,7 +69,7 @@ const HookModal = forwardRef<HookModalRef, IModalConfig>((props, ref) => {
     setVisible(false);
   }
 
-  const { content, ...retProps } = props;
+  const { content, ...retProps } = config;
 
   const modalConfig = {
     ...retProps,
