@@ -105,10 +105,57 @@ export const renderText = ({ y, m, d }) => {
   const date = new Date(`${y}-${m}-${d}`);
   const day = date.getDay();
   const curDate = date.getDate();
-  console.log("进来 ", day, curDate, y, m, d);
   if (day === 1 || curDate === 1) {
     return `${m}月${d}日`;
   } else {
     return d;
   }
+};
+
+export const computedWeek = (targetDate) => {
+  let currentFirstDate;
+  const formatDate = (date) => {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var week =
+      "(" +
+      ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"][
+        date.getDay()
+      ] +
+      ")";
+
+    return {
+      cls: "arco-calendar-cell-date prev",
+      y: year,
+      m: month,
+      d: day,
+      weekType: date.getDay(),
+      week,
+    };
+  };
+  var addDate = function (date, n) {
+    date.setDate(date.getDate() + n);
+    return date;
+  };
+  const setDate = (date) => {
+    var week = date.getDay() - 1;
+    date = addDate(date, week * -1);
+    currentFirstDate = new Date(date);
+    const result = [];
+    for (let i = 0; i < 7; i++) {
+      const tmp = formatDate(i == 0 ? date : addDate(date, 1));
+      result.push(tmp);
+    }
+    return result;
+  };
+  setDate(new Date(targetDate));
+  return {
+    preWeek: () => {
+      return setDate(addDate(currentFirstDate, -7));
+    },
+    nextWeek: () => {
+      return setDate(addDate(currentFirstDate, 7));
+    },
+  };
 };

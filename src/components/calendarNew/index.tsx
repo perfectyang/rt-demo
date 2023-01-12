@@ -1,5 +1,12 @@
 import { Select, Button } from "@arco-design/web-react";
-import { getEndDay, getFirstWeek, getLastDate, renderText, ut } from "./utils";
+import {
+  computedWeek,
+  getEndDay,
+  getFirstWeek,
+  getLastDate,
+  renderText,
+  ut,
+} from "./utils";
 import "./index.less";
 import React from "react";
 
@@ -27,29 +34,21 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
   const [years, setYears] = React.useState<any[]>([]);
   const [months, setMonths] = React.useState<any[]>([]);
   const [days, setDays] = React.useState<any[]>([]);
-  const [page, setPage] = React.useState(0);
-  const [direction, setDirection] = React.useState(0);
 
   const randomId = () => Math.random().toString(36).substring(2);
 
   const eachDays = (yd: number, md: number) => {
-    console.log("object", yd, md);
     const lastMonEndDay = getEndDay(yd, md - 1); // 上个月的最后一天
     const curMonEndDay = getEndDay(yd, md); // 当前月的最后一天
     const week = getFirstWeek(yd, md); // 当前月的第一天是周几
     let lastWeekNum = week - 1; // 上个月占几个格子
     lastWeekNum = week === 0 ? 6 : lastWeekNum;
 
-    const offset = page * 7;
-
     // 渲染几行几行
     const row = 6;
     const column = 7;
-    console.log("pagepage,,", page);
-
     const daysArr: Record<string, any>[] = [];
     let prevStartDate = lastMonEndDay - lastWeekNum + 1; // 上个月的起始日期
-    console.log("prevStartDate", prevStartDate);
     let curStartDate = 1;
     let nextStartDate = 1;
 
@@ -61,7 +60,6 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
           cls: "arco-calendar-cell-date prev",
           y: lastDate.getFullYear(),
           m: lastDate.getMonth() + 1,
-          // d: prevStartDate++,
           d: prevStartDate++,
         });
       } else if (i >= lastWeekNum + curMonEndDay) {
@@ -86,7 +84,6 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
         });
       }
     }
-    console.log("daysArr", daysArr);
     setDays(daysArr);
   };
 
@@ -96,27 +93,60 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
     },
   }));
 
+  const prevWeek = () => {
+    setDays((days) => {
+      const firstDay = days.slice(0, 7)[3];
+      const { preWeek } = computedWeek(
+        `${firstDay.y}-${firstDay.m}-${firstDay.d}`
+      );
+      const ret = preWeek();
+      days.unshift(...ret);
+      let i = 0;
+      while (i < 7) {
+        days.pop();
+        i++;
+      }
+      days.forEach((cur) => {
+        if (cur.y === vals.y && cur.m === vals.m) {
+          cur.cls = "arco-calendar-cell-date";
+        }
+      });
+      console.log("days", days);
+      return [...days];
+    });
+  };
+
+  const nextWeek = () => {
+    setDays((days) => {
+      const lastDay = days[days.length - 3];
+      const { nextWeek } = computedWeek(
+        `${lastDay.y}-${lastDay.m}-${lastDay.d}`
+      );
+      const ret = nextWeek();
+      days.push(...ret);
+      let i = 0;
+      while (i < 7) {
+        days.shift();
+        i++;
+      }
+      days.forEach((cur) => {
+        if (cur.y === vals.y && cur.m === vals.m) {
+          cur.cls = "arco-calendar-cell-date";
+        }
+        if (cur.y === vals.y && cur.m === vals.m) {
+          cur.cls = "arco-calendar-cell-date";
+        }
+      });
+
+      return [...days];
+    });
+  };
+
   const pageCalendar = () => {
     return (
       <div>
-        <Button
-          onClick={() => {
-            console.log("days", days);
-            // setVals();
-            // setPage((pr) => pr + 1);
-            // setDirection(0);
-          }}
-        >
-          pre
-        </Button>
-        <Button
-          onClick={() => {
-            setPage((pr) => pr - 1);
-            setDirection(1);
-          }}
-        >
-          next
-        </Button>
+        <Button onClick={prevWeek}>上一周</Button>
+        <Button onClick={nextWeek}>下一周</Button>
       </div>
     );
   };
@@ -184,7 +214,7 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
               className={item.cls}
               key={randomId()}
               onClick={() => {
-                // checkDate({ y: item.y, m: item.m, d: item.d })
+                checkDate({ y: item.y, m: item.m, d: item.d });
               }}
             >
               <p>{renderText(item)}</p>
@@ -205,10 +235,10 @@ const Calendar = React.forwardRef<IRef, IProps>((props, ref) => {
 
   React.useEffect(() => {
     eachDays(vals.y, vals.m);
-  }, [vals, page, direction]);
+  }, [vals]);
   React.useEffect(() => {
     eachDays(checked.y, checked.m);
-  }, [checked, page, direction]);
+  }, [checked]);
 
   React.useEffect(() => {
     setYears(() => {

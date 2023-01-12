@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>日历操作</title>
+    <script>
+      const computedWeek = (targetDate) => {
+        let currentFirstDate;
+        const formatDate = (date) => {
+          var year = date.getFullYear() + "-";
+          var month = date.getMonth() + 1 + "-";
+          var day = date.getDate();
+          var week =
+            "(" +
+            [
+              "星期日",
+              "星期一",
+              "星期二",
+              "星期三",
+              "星期四",
+              "星期五",
+              "星期六",
+            ][date.getDay()] +
+            ")";
+
+          return year + month + day + " " + week;
+        };
+        var addDate = function (date, n) {
+          date.setDate(date.getDate() + n);
+          return date;
+        };
+        const setDate = (date) => {
+          var week = date.getDay() - 1;
+          date = addDate(date, week * -1);
+          currentFirstDate = new Date(date);
+          const result = [];
+          for (let i = 0; i < 7; i++) {
+            const tmp = formatDate(i == 0 ? date : addDate(date, 1));
+            result.push(tmp);
+          }
+          return result;
+        };
+        setDate(new Date(targetDate));
+        return {
+          preWeek: () => {
+            return setDate(addDate(currentFirstDate, -7));
+          },
+          nextWeek: () => {
+            return setDate(addDate(currentFirstDate, 7));
+          },
+        };
+      };
+
+      window.onload = function () {
+        const { preWeek, nextWeek } = computedWeek("2022-12-24");
+        document.getElementById("last-week").onclick = function () {
+          const week = preWeek();
+          console.log("weekll, week", week);
+        };
+        document.getElementById("next-week").onclick = function () {
+          const week = nextWeek();
+          console.log("weekll, week2222", week);
+        };
+      };
+    </script>
+  </head>
+  <body>
+    <button id="last-week">上一周</button><button id="next-week">下一周</button>
+    <table id="monitor">
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </body>
+</html>
