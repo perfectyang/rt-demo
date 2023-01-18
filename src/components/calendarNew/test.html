@@ -4,16 +4,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>日历操作</title>
     <script>
-      const computedWeek = (targetDate) => {
-        let currentFirstDate;
-        const formatDate = (date) => {
-          var year = date.getFullYear() + "-";
-          var month = date.getMonth() + 1 + "-";
-          var day = date.getDate();
+      window.onload = function () {
+        var cells = document
+          .getElementById("monitor")
+          .getElementsByTagName("td");
+        var clen = cells.length;
+        var currentFirstDate;
+        var formatDate = function (date) {
+          var year = date.getFullYear() + "年";
+          var month = date.getMonth() + 1 + "月";
+          var day = date.getDate() + "日";
           var week =
             "(" +
             [
-              "星期日",
+              "星期天",
               "星期一",
               "星期二",
               "星期三",
@@ -29,38 +33,23 @@
           date.setDate(date.getDate() + n);
           return date;
         };
-        const setDate = (date) => {
+        var setDate = function (date) {
           var week = date.getDay() - 1;
           date = addDate(date, week * -1);
           currentFirstDate = new Date(date);
-          const result = [];
-          for (let i = 0; i < 7; i++) {
-            const tmp = formatDate(i == 0 ? date : addDate(date, 1));
-            result.push(tmp);
-          }
-          return result;
-        };
-        setDate(new Date(targetDate));
-        return {
-          preWeek: () => {
-            return setDate(addDate(currentFirstDate, -7));
-          },
-          nextWeek: () => {
-            return setDate(addDate(currentFirstDate, 7));
-          },
-        };
-      };
 
-      window.onload = function () {
-        const { preWeek, nextWeek } = computedWeek("2022-12-24");
+          for (var i = 0; i < clen; i++) {
+            cells[i].innerHTML = formatDate(i == 0 ? date : addDate(date, 1));
+          }
+        };
         document.getElementById("last-week").onclick = function () {
-          const week = preWeek();
-          console.log("weekll, week", week);
+          setDate(addDate(currentFirstDate, -7));
         };
         document.getElementById("next-week").onclick = function () {
-          const week = nextWeek();
-          console.log("weekll, week2222", week);
+          setDate(addDate(currentFirstDate, 7));
         };
+        // setDate();
+        setDate(new Date("2023-2-3"));
       };
     </script>
   </head>

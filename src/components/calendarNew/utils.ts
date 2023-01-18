@@ -102,7 +102,7 @@ export const getFirstWeek = (year, month) => {
 };
 
 export const renderText = ({ y, m, d }) => {
-  const date = new Date(`${y}-${m}-${d}`);
+  const date = new Date(`${y}/${m}/${d}`);
   const day = date.getDay();
   const curDate = date.getDate();
   if (day === 1 || curDate === 1) {
@@ -113,12 +113,13 @@ export const renderText = ({ y, m, d }) => {
 };
 
 export const computedWeek = (targetDate) => {
+  console.log("lastDay3", targetDate);
   let currentFirstDate;
   const formatDate = (date) => {
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var week =
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const week =
       "(" +
       ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"][
         date.getDay()
@@ -126,11 +127,10 @@ export const computedWeek = (targetDate) => {
       ")";
 
     return {
-      cls: "arco-calendar-cell-date prev",
+      cls: "arco-calendar-cell-date gray",
       y: year,
       m: month,
       d: day,
-      weekType: date.getDay(),
       week,
     };
   };
@@ -142,14 +142,16 @@ export const computedWeek = (targetDate) => {
     var week = date.getDay() - 1;
     date = addDate(date, week * -1);
     currentFirstDate = new Date(date);
-    const result = [];
+    const result: any[] = [];
     for (let i = 0; i < 7; i++) {
       const tmp = formatDate(i == 0 ? date : addDate(date, 1));
       result.push(tmp);
     }
     return result;
   };
-  setDate(new Date(targetDate));
+  // sa
+  const tmp = new Date(targetDate.replace(/-/g, "/"));
+  setDate(tmp);
   return {
     preWeek: () => {
       return setDate(addDate(currentFirstDate, -7));
@@ -158,4 +160,71 @@ export const computedWeek = (targetDate) => {
       return setDate(addDate(currentFirstDate, 7));
     },
   };
+};
+
+export const chunk = (arr, size) => {
+  const len = arr.length;
+  const rows: any[] = [];
+  for (let i = 0; i < len; i++) {
+    const tmp = arr[i];
+    if (i % size === 0) {
+      rows.push([tmp]);
+    } else {
+      rows[rows.length - 1].push(tmp);
+    }
+  }
+  return rows;
+};
+
+export const getTodayDate = () => {
+  const todayDate = new Date();
+  return {
+    y: todayDate.getFullYear(),
+    m: todayDate.getMonth() + 1,
+    d: todayDate.getDate(),
+  };
+};
+
+// 计算当月天数
+export const computedCalendar = (yd: number, md: number) => {
+  const lastMonEndDay = getEndDay(yd, md - 1); // 上个月的最后一天
+  const curMonEndDay = getEndDay(yd, md); // 当前月的最后一天
+  const week = getFirstWeek(yd, md); // 当前月的第一天是周几
+  let lastWeekNum = week - 1; // 上个月占几个格子
+  lastWeekNum = week === 0 ? 6 : lastWeekNum;
+  // 渲染几行几行
+  const row = 6;
+  const column = 7;
+  const daysArr: Record<string, any>[] = [];
+  let prevStartDate = lastMonEndDay - lastWeekNum + 1; // 上个月的起始日期
+  let curStartDate = 1;
+  let nextStartDate = 1;
+
+  for (let i = 0; i < row * column; i++) {
+    if (i < lastWeekNum) {
+      // 上个月的日期
+      const lastDate = getLastDate(yd, md - 1);
+      daysArr.push({
+        y: lastDate.getFullYear(),
+        m: lastDate.getMonth() + 1,
+        d: prevStartDate++,
+      });
+    } else if (i >= lastWeekNum + curMonEndDay) {
+      // 下个月的日期
+      const nextDate = getLastDate(yd, md + 1);
+      daysArr.push({
+        y: nextDate.getFullYear(),
+        m: nextDate.getMonth() + 1,
+        d: nextStartDate++,
+      });
+    } else {
+      // 当月的日期
+      daysArr.push({
+        y: yd,
+        m: md,
+        d: curStartDate++,
+      });
+    }
+  }
+  return daysArr;
 };

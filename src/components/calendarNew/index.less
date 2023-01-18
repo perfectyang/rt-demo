@@ -11,14 +11,17 @@
 }
 .arco-calendar-cell-week {
   width: 14%;
-  // width: 100px;
   display: block;
   float: left;
   border-top: 1px solid var(--color-neutral-3);
   border-right: 1px solid var(--color-neutral-3);
-  background-color: var(--color-fill-1);
+  background-color: #fbe9d2;
   &:nth-child(7n) {
     border-right: none;
+  }
+  &:nth-child(6),
+  &:nth-child(7) {
+    background-color: var(--color-fill-1);
   }
   p {
     padding: 10px;
@@ -32,7 +35,7 @@
   position: relative;
   border-top: 1px solid var(--color-neutral-3);
   border-right: 1px solid var(--color-neutral-3);
-  cursor: pointer;
+  // cursor: pointer;
 
   &:hover {
     background-color: var(--color-fill-1);
@@ -42,6 +45,11 @@
     border-right: none;
   }
 
+  &.gray {
+    p {
+      color: var(--color-text-4);
+    }
+  }
   &.prev {
     p {
       color: var(--color-text-4);
@@ -62,6 +70,8 @@
       border-radius: 4px;
       font-weight: 700;
     }
+    .text {
+    }
   }
 
   p {
@@ -75,4 +85,9 @@
     padding: 5px;
     height: 100px;
   }
+}
+.date-show {
+  font-size: 20px;
+  font-weight: bold;
+  padding-right: 20px;
 }
