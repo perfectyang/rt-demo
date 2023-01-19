@@ -2,11 +2,7 @@ import React from "react";
 import Calendar from "./index";
 
 const Demo = () => {
-  return (
-    <div>
-      <Calendar />
-    </div>
-  );
+  return <Calendar />;
 };
 
 export default Demo;
