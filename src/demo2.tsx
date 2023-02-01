@@ -1,5 +1,5 @@
-import React from 'react';
-import { Upload, Button, Space } from '@arco-design/web-react';
+import React from "react";
+import { Upload, Button, Space } from "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 
 function TestDemo() {
@@ -9,14 +9,16 @@ function TestDemo() {
 
   const onSubmit = (e: any, isFirst: any) => {
     e.stopPropagation();
-    const file = isFirst ? fileList.filter((x) => x.status === 'init')[0] : null;
+    const file = isFirst
+      ? fileList.filter((x) => x.status === "init")[0]
+      : null;
     uploadRef.current && uploadRef.current.submit(file);
   };
 
   const onChange = (files: any) => {
-    console.log('files', files)
+    console.log("files", files);
     setFileList(files);
-    setDisabled(!files.some((x: any) => x.status === 'init'));
+    setDisabled(!files.some((x: any) => x.status === "init"));
   };
 
   const onProgress = (file: any) => {
@@ -30,18 +32,18 @@ function TestDemo() {
       ref={uploadRef}
       multiple
       autoUpload={false}
-      action='/'
+      action="/"
       onChange={onChange}
       onProgress={onProgress}
       fileList={fileList}
     >
-      <Space size='large'>
+      <Space size="large">
         <Button>Select file</Button>
-        <Button type='primary' onClick={onSubmit} disabled={disabled}>
+        <Button type="primary" onClick={onSubmit} disabled={disabled}>
           Start upload
         </Button>
         <Button
-          type='primary'
+          type="primary"
           onClick={(e) => {
             onSubmit(e, true);
           }}
