@@ -9,7 +9,6 @@ import { IFormItem } from "./Form/types";
 import { useReactive } from "ahooks";
 
 const RenderDemo: React.FC = () => {
-
   useEffect(() => {
     console.log("render111");
   }, []);
@@ -55,11 +54,7 @@ const fakeSyncOpts = () => {
   });
 };
 
-
-
-
 const _columnConfig = (ob?): IFormItem[] => {
-  
   console.log("render-----");
   return [
     {
@@ -142,7 +137,6 @@ const _columnConfig = (ob?): IFormItem[] => {
 
 const TestDemo = () => {
   const { openDialog, modalVisible } = useDialog();
-
 
   const renderList = () => {
     console.log("get-renderList");
