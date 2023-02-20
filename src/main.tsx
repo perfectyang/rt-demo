@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 // import App from './App'
 // import App from "./components/TestForm/test";
-import App from "./components/TableEdit";
+// import App from "./components/TableEdit";
+import App from "./components/TableFix";
 // import App from "./components/TestHook/index";
 // import './index.css'
 import "@arco-design/web-react/dist/css/arco.css";
