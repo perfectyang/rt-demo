@@ -12,6 +12,9 @@ import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 import "./index.css";
 
+// 文档api
+// https://www.ag-grid.com/javascript-data-grid/column-sizing/#column-flex
+
 const AgTable = () => {
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -80,12 +83,10 @@ const AgTable = () => {
     []
   );
 
-  // Example of consuming Grid Event
   const cellClickedListener = useCallback((event) => {
     console.log("cellClicked", event);
   }, []);
 
-  // Example load data from sever
   useEffect(() => {
     fetch("https://www.ag-grid.com/example-assets/row-data.json")
       .then((result) => result.json())
@@ -100,7 +101,7 @@ const AgTable = () => {
   return (
     <div>
       {/* Example using Grid's API */}
-      <button onClick={buttonListener}>Push Me</button>
+      {/* <button onClick={buttonListener}>Push Me</button> */}
 
       {/* On div wrapping Grid a) specify theme CSS Class Class and b) sets Grid size */}
       <div
