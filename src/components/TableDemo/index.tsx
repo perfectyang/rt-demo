@@ -1,7 +1,6 @@
 import React from "react";
-import { Table, Column, HeaderCell, Cell } from "rsuite-table";
-import "rsuite-table/lib/less/index.less";
-// import "rsuite-table/dist/css/rsuite-table.css";
+import { Table, Column, HeaderCell, Cell } from "./src/index";
+import "./src/less/index.less";
 
 const dataList = [
   { id: 1, name: "a", email: "a@email.com", avartar: "..." },
@@ -17,7 +16,7 @@ const ImageCell = ({ rowData, dataKey, ...rest }) => (
 );
 
 const TableDemo = () => (
-  <Table cellBordered data={dataList}>
+  <Table bordered cellBordered data={dataList}>
     <Column width={100} sortable fixed resizable>
       <HeaderCell>ID</HeaderCell>
       <Cell dataKey="id" />
@@ -37,10 +36,10 @@ const TableDemo = () => (
       </Cell>
     </Column>
 
-    <Column width={100} resizable>
-      <HeaderCell>Avartar</HeaderCell>
-      <ImageCell dataKey="avartar" />
-    </Column>
+    {/* <Column width={100} resizable> */}
+    {/*   <HeaderCell>Avartar</HeaderCell> */}
+    {/*   <ImageCell dataKey="avartar" /> */}
+    {/* </Column> */}
   </Table>
 );
 

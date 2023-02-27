@@ -14,13 +14,18 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@juggle/resize-observer": "^3.4.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^2.1.0",
     "ahooks": "^3.7.3",
+    "classnames": "^2.3.2",
+    "dom-lib": "^3.1.6",
     "less": "^4.1.3",
+    "lodash": "^4.17.21",
     "pkg-exports": "^0.1.2",
     "plain-design-composition": "^0.0.133",
+    "react-is": "^18.2.0",
     "rsuite-table": "^5.8.2",
     "typescript": "^4.6.4",
     "unplugin-auto-import": "^0.12.0",
