@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { render } from "react-dom";
 import { AgGridReact } from "ag-grid-react"; // the AG Grid React Component
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
@@ -21,15 +20,16 @@ const AgTable = () => {
 
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState([
-    {
-      field: "",
-      rowDrag: true,
-      width: 20,
-      // minWidth: 170,
-    },
+    // {
+    //   field: "",
+    //   rowDrag: true,
+    //   width: 20,
+    //   // minWidth: 170,
+    // },
     {
       field: "id2",
-      width: 20,
+      width: 50,
+      rowDrag: true,
       headerCheckboxSelection: true,
       checkboxSelection: true,
       showDisabledCheckboxes: true,
@@ -78,7 +78,7 @@ const AgTable = () => {
   const defaultColDef = useMemo(
     () => ({
       // sortable: true,
-      // resizable: true,
+      resizable: true,
     }),
     []
   );
