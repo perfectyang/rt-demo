@@ -1,6 +1,6 @@
 import React from "react";
-import { Table, Column, HeaderCell, Cell } from "../src/index";
-import "../src/less/index.less";
+import { Table, Column, HeaderCell, Cell } from "../RsuitTable/index";
+import "../RsuitTable/less/index.less";
 // import "./index.less";
 
 import { mockUsers } from "../data/mock";
