@@ -14,6 +14,7 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@juggle/resize-observer": "^3.4.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
@@ -26,6 +27,7 @@
     "pkg-exports": "^0.1.2",
     "plain-design-composition": "^0.0.133",
     "react-is": "^18.2.0",
+    "rsuite": "^5.28.1",
     "rsuite-table": "^5.8.2",
     "typescript": "^4.6.4",
     "unplugin-auto-import": "^0.12.0",

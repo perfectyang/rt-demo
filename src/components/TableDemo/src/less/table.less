@@ -1,7 +1,20 @@
 &-table {
+  * {
+    box-sizing: border-box;
+  }
+
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   border: 1px solid @border-color;
   position: relative;
   overflow: hidden;
+  font-size: 14px;
+  font-weight: normal;
+  // color: #ececec;
+  color: #575757;
   &-column-resizing {
     cursor: ew-resize;
     .user-select();
@@ -97,8 +110,8 @@
       vertical-align: middle;
     }
     &-content {
-      padding: 8px;
-
+      // padding: 8px;
+      padding: 0px 8px;
       .ellipsis();
     }
 

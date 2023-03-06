@@ -1,6 +1,8 @@
 import React from "react";
 import { Table, Column, HeaderCell, Cell } from "./src/index";
 import "./src/less/index.less";
+import "./index.less";
+// import "rsuite/styles/index.less";
 
 const dataList = [
   { id: 1, name: "a", email: "a@email.com", avartar: "..." },
