@@ -52,9 +52,9 @@ const FixedHeader: React.FC<IProps> = (props) => {
         resizable: true,
         // sortable: "asc",
         fullText: true,
-        render: (rowData, idx) => {
-          return <div>{rowData.lastName + "-" + idx}</div>;
-        },
+        // render: (rowData, idx) => {
+        //   return <div>{rowData.lastName + "-" + idx}</div>;
+        // },
         // fixed: "left",
       },
       {
@@ -87,9 +87,9 @@ const FixedHeader: React.FC<IProps> = (props) => {
       {
         title: "company",
         dataIndex: "company",
-        flexGrow: 2,
-        // width: 200,
-        // resizable: true,
+        // flexGrow: 2,
+        width: 200,
+        resizable: true,
         // fixed: "left",
         // fullText: true,
       },
