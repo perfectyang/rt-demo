@@ -13,7 +13,6 @@
   overflow: hidden;
   font-size: 14px;
   font-weight: normal;
-  // color: #ececec;
   color: #575757;
   &-column-resizing {
     cursor: ew-resize;
@@ -112,10 +111,15 @@
     &-content {
       // padding: 8px;
       padding: 0px 8px;
+      display: flex;
+      align-items: center;
+    }
+    &-content-omit {
       .ellipsis();
     }
 
     &-header {
+      // background-color: #ececec;
       &-sortable {
         cursor: pointer;
       }
