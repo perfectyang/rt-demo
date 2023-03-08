@@ -224,6 +224,7 @@ const Cell = React.forwardRef(
       >
         <div className={prefix("content")} style={contentStyles}>
           <div className={prefix("content-omit")}>{content}</div>
+          {/* {content} */}
         </div>
       </div>
     );
