@@ -1,7 +1,29 @@
 import React from "react";
 import { useState, forwardRef } from "react";
-import { Table } from "@arco-design/web-react";
-import { Resizable } from "react-resizable";
+import { Table, DatePicker } from "@arco-design/web-react";
+import QuarterOfYear from "dayjs/plugin/quarterOfYear";
+import originDayjs, { Dayjs, OpUnitType, UnitType } from "dayjs";
+originDayjs.extend(QuarterOfYear);
+const dayjs = originDayjs;
+// import { Resizable } from "react-resizable";
+export function padStart(string, length: number, char = " ") {
+  const s = String(string);
+  if (!length) {
+    return s;
+  }
+  const newString = s.length < length ? `${char}${s}` : s;
+  return newString.length < length
+    ? padStart(newString, length, char)
+    : newString;
+}
+
+const setSeason = (q) => {
+  const date = `2023-${padStart((q - 1) * 3 + 1, 2, "0")}-01`;
+  const a = new Date(date);
+  console.log("a", a, date);
+  return a;
+};
+
 import "./index.less";
 const originColumns = [
   {
@@ -131,16 +153,26 @@ function App() {
       th: ResizableTitle,
     },
   };
+  const [val, setVal] = useState("");
   return (
-    <Table
-      className="table-demo-resizable-column"
-      components={components}
-      border
-      borderCell
-      scroll={{ x: "100px" }}
-      columns={columns}
-      data={data}
-    />
+    // <Table
+    //   className="table-demo-resizable-column"
+    //   components={components}
+    //   border
+    //   borderCell
+    //   scroll={{ x: "100px" }}
+    //   columns={columns}
+    //   data={data}
+    // />
+    <>
+      <DatePicker.QuarterPicker
+        value={new Date(val.replace("Q", "0"))}
+        onChange={(val) => {
+          console.log("val", val);
+        }}
+        style={{ width: 200 }}
+      />
+    </>
   );
 }
 
