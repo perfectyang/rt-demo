@@ -9,43 +9,34 @@ const FixedHeader: React.FC<IProps> = (props) => {
   const data = [
     {
       id: 1,
-      email: "Leora13@yahoo.com",
+      // email: null,
       firstName: "Ernest Schuppe Anderson",
-      lastName: "lastName第一行",
+      // lastName: null,
       city: "New Gust",
-      cityRowSpan: 3,
-      street: "第一行",
-      streetRowSpan: 2,
-      companyName: "Lebsack - Nicolas",
+      // companyName: null,
     },
     {
       id: 2,
-      email: "Mose_Gerhold51@yahoo.com",
       firstName: "Janis",
-      lastName: "lastName第二行",
-      lastNameRowSpan: 2,
+      lastName: null,
       city: "New Gust",
-      street: "第二行",
+      email: null,
       companyName: "Glover - Hermiston",
     },
     {
       id: 3,
-      email: "Frieda.Sauer61@gmail.com",
       firstName: "Makenzie Vandervort",
-      lastName: "lastName第三行",
+      lastName: null,
       city: "New Gust",
-      street: "第三行",
-      companyName: "Williamson - Kassulke",
+      // email: "Frieda.Sauer61@gmail.com",
+      // companyName: "company",
     },
     {
       id: 4,
       email: "Eloisa.OHara@hotmail.com",
       firstName: "Ciara",
       lastName: "Towne",
-      city: "头开始合并",
-      cityRowSpan: 4,
-      street: "Mosciski Estate",
-      streetRowSpan: 2,
+      city: "Vandervort",
       companyName: "Hilpert, Eichmann and Brown",
     },
     {
@@ -54,7 +45,6 @@ const FixedHeader: React.FC<IProps> = (props) => {
       firstName: "Suzanne",
       lastName: "Wolff",
       city: "Vandervort",
-      street: "Mosciski Estate",
       companyName: "Mayer - Considine",
     },
     {
@@ -63,8 +53,6 @@ const FixedHeader: React.FC<IProps> = (props) => {
       firstName: "Alessandra",
       lastName: null,
       city: "Vandervort",
-      street: "Kali Spurs",
-      streetRowSpan: 2,
       companyName: "Nikolaus and Sons",
     },
     {
@@ -73,7 +61,6 @@ const FixedHeader: React.FC<IProps> = (props) => {
       firstName: "Margret",
       lastName: "Heller",
       city: "Vandervort",
-      street: "Kali Spurs",
       companyName: "Corwin, Maggio and Wintheiser",
     },
     {
@@ -82,72 +69,44 @@ const FixedHeader: React.FC<IProps> = (props) => {
       firstName: "Emiliano",
       lastName: "Moore",
       city: "Gilberthaven",
-      cityRowSpan: 2,
-      street: null,
       companyName: "Gulgowski - Botsford",
     },
     {
       id: 9,
+      city: "Gilberthaven",
       email: "Gaylord_Reichel16@yahoo.com",
       firstName: "Alessandra",
       lastName: "Smith",
-      city: "Gilberthaven",
-      street: "Kali Spurs",
       companyName: "Maggio LLC",
     },
   ];
 
   return (
-    <Table bordered cellBordered autoHeight data={data}>
-      <Column width={80} fixed>
+    <Table bordered cellBordered height={420} headerHeight={30} data={data}>
+      <Column width={70} align="center">
         <HeaderCell>Id</HeaderCell>
         <Cell dataKey="id" />
       </Column>
-      <Column
-        width={200}
-        verticalAlign="middle"
-        rowSpan={(rowData) => {
-          return rowData.cityRowSpan;
-        }}
-      >
-        <HeaderCell>City</HeaderCell>
-        <Cell dataKey="city" />
-      </Column>
-
-      <Column
-        width={200}
-        verticalAlign="middle"
-        rowSpan={(rowData) => {
-          return rowData.streetRowSpan;
-        }}
-      >
-        <HeaderCell>Street</HeaderCell>
-        <Cell dataKey="street" />
-      </Column>
-
-      <Column width={130}>
+      <Column width={130} colSpan={2}>
         <HeaderCell>First Name</HeaderCell>
         <Cell dataKey="firstName" />
       </Column>
-
-      <Column
-        width={130}
-        rowSpan={(rowData) => {
-          return rowData.lastNameRowSpan;
-        }}
-      >
+      <Column width={130}>
         <HeaderCell>Last Name</HeaderCell>
         <Cell dataKey="lastName" />
       </Column>
 
-      <Column width={200}>
-        <HeaderCell>Company Name</HeaderCell>
-        <Cell dataKey="companyName" />
+      <Column width={200} colSpan={3}>
+        <HeaderCell>City</HeaderCell>
+        <Cell dataKey="city" />
       </Column>
-
-      <Column width={80} fixed="right">
-        <HeaderCell>...</HeaderCell>
-        <Cell>Edit</Cell>
+      <Column width={200}>
+        <HeaderCell>Email</HeaderCell>
+        <Cell dataKey="email" />
+      </Column>
+      <Column width={200} flexGrow={1}>
+        <HeaderCell>CompanyName</HeaderCell>
+        <Cell dataKey="companyName" />
       </Column>
     </Table>
   );

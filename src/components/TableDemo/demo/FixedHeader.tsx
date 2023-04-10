@@ -1,6 +1,14 @@
 import React from "react";
-import { Table, Column, HeaderCell, Cell, SortType } from "../RsuitTable/index";
-import "../RsuitTable/less/index.less";
+import {
+  Table,
+  Column,
+  HeaderCell,
+  Cell,
+  SortType,
+} from "../NewRsuitTable/index";
+// import { Table, Column, HeaderCell, Cell, SortType } from "../RsuitTable/index";
+// import "../RsuitTable/less/index.less";
+import "../NewRsuitTable/less/index.less";
 // import "./index.less";
 
 import { mockUsers } from "../data/mock";
@@ -33,9 +41,11 @@ const FixedHeader: React.FC<IProps> = (props) => {
       });
     }
   };
+  const ref = React.useRef({});
 
   const _columnConfig = React.useMemo(() => {
-    return [
+    console.log("ref", ref);
+    const ret = [
       {
         title: "id",
         dataIndex: "id",
@@ -71,6 +81,10 @@ const FixedHeader: React.FC<IProps> = (props) => {
         dataIndex: "city",
         width: 200,
         resizable: true,
+        // onResize: (columnWidth, dataKey) => {
+        //   console.log("columnWidth, dataKey", columnWidth, dataKey);
+        // },
+
         // fixed: "left",
         // verticalAlign: "middle",
         // fullText: true,
@@ -116,7 +130,24 @@ const FixedHeader: React.FC<IProps> = (props) => {
         // fullText: true,
       },
     ];
-  }, []);
+
+    return ret.map((cur) => {
+      const column: any = { ...cur };
+      if (column.resizable) {
+        column.onResize = (columnWidth: number, dataKey: string) => {
+          ref.current[dataKey] = columnWidth;
+        };
+        if (ref.current[column.dataIndex] === undefined) {
+          ref.current[column.dataIndex] = column.width;
+        } else {
+          column.width = ref.current[column.dataIndex];
+        }
+      }
+      return {
+        ...column,
+      };
+    });
+  }, [sortType]);
 
   const handleSortColumn = (sortColumn, sortType) => {
     setSortColumn(sortColumn);
@@ -144,7 +175,6 @@ const FixedHeader: React.FC<IProps> = (props) => {
       >
         {_columnConfig.map((column, idx) => {
           const { title, dataIndex, render, ...ret } = column;
-          console.log("idx", idx);
           const line = idx;
           return (
             <Column key={idx} {...ret}>

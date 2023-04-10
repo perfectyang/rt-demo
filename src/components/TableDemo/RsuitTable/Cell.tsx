@@ -154,7 +154,7 @@ const Cell = React.forwardRef(
     };
 
     if (verticalAlign) {
-      contentStyles.lineHeight = nextHeight + "px";
+      // contentStyles.lineHeight = nextHeight + "px";
       // contentStyles.display = "table-cell";
       // contentStyles.verticalAlign = verticalAlign;
     }
